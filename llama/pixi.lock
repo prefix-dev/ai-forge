@@ -1,0 +1,68 @@
+version: 4
+environments:
+  default:
+    channels:
+    - url: file:///Users/wolfv/Programs/ai-examples/output/
+    - url: https://conda.anaconda.org/conda-forge/
+    packages:
+      osx-arm64:
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/ca-certificates-2024.2.2-hf0a4a13_0.conda
+      - conda: file:///Users/wolfv/Programs/ai-examples/output/osx-arm64/llama-cpp-b2636-h60d57d3_0.conda
+      - conda: file:///Users/wolfv/Programs/ai-examples/output/noarch/llava-7b-q4-1.5-h4616a5c_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/openssl-3.2.1-h0d3ecfb_1.conda
+packages:
+- kind: conda
+  name: ca-certificates
+  version: 2024.2.2
+  build: hf0a4a13_0
+  subdir: osx-arm64
+  url: https://conda.anaconda.org/conda-forge/osx-arm64/ca-certificates-2024.2.2-hf0a4a13_0.conda
+  sha256: 49bc3439816ac72d0c0e0f144b8cc870fdcc4adec2e861407ec818d8116b2204
+  md5: fb416a1795f18dcc5a038bc2dc54edf9
+  license: ISC
+  size: 155725
+  timestamp: 1706844034242
+- kind: conda
+  name: llama-cpp
+  version: b2636
+  build: h60d57d3_0
+  subdir: osx-arm64
+  url: file:///Users/wolfv/Programs/ai-examples/output/osx-arm64/llama-cpp-b2636-h60d57d3_0.conda
+  sha256: b51624b256cc7f92447cfbd71597495e019ec95b3f22c1882d5c95c1d13075af
+  md5: 1c8d20d046e4911d24ca73fa7ef97915
+  depends:
+  - openssl >=3.2.1,<4.0a0
+  arch: arm64
+  platform: osx
+  size: 7369147
+  timestamp: 1712854730596
+- kind: conda
+  name: llava-7b-q4
+  version: '1.5'
+  build: h4616a5c_0
+  subdir: noarch
+  noarch: generic
+  url: file:///Users/wolfv/Programs/ai-examples/output/noarch/llava-7b-q4-1.5-h4616a5c_0.conda
+  sha256: cdf884d1f1b002e3bf05d4934db20023bf92cd808715e153029a1e6bd4a110b9
+  md5: d8c1dff92497f063c2cfe3dc4569f088
+  depends:
+  - llama-cpp
+  size: 4008909790
+  timestamp: 1712748639320
+- kind: conda
+  name: openssl
+  version: 3.2.1
+  build: h0d3ecfb_1
+  build_number: 1
+  subdir: osx-arm64
+  url: https://conda.anaconda.org/conda-forge/osx-arm64/openssl-3.2.1-h0d3ecfb_1.conda
+  sha256: 519dc941d7ab0ebf31a2878d85c2f444450e7c5f6f41c4d07252c6bb3417b78b
+  md5: eb580fb888d93d5d550c557323ac5cee
+  depends:
+  - ca-certificates
+  constrains:
+  - pyopenssl >=22.1
+  license: Apache-2.0
+  license_family: Apache
+  size: 2855250
+  timestamp: 1710793435903

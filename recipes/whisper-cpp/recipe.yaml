@@ -23,7 +23,7 @@ outputs:
         - cp main $PREFIX/bin/whisper-cpp
         - cp stream $PREFIX/bin/whisper-cpp-stream
         # forcibly add rpath to the binary
-        - install_name_tool -add_rpath $PREFIX/lib $PREFIX/bin/whisper-cpp-stream
+        # - install_name_tool -add_rpath $PREFIX/lib $PREFIX/bin/whisper-cpp-stream
         - cp ./ggml-metal.metal $PREFIX/bin/
 
   # - package:

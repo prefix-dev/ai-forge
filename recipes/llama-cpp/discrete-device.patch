@@ -1,0 +1,34 @@
+diff --git a/ggml-metal.m b/ggml-metal.m
+index 419d8b9e..f00a703c 100644
+--- a/ggml-metal.m
++++ b/ggml-metal.m
+@@ -269,13 +269,28 @@ static struct ggml_metal_context * ggml_metal_init(int n_cb) {
+     for (id<MTLDevice> device in devices) {
+         GGML_METAL_LOG_INFO("%s: found device: %s\n", __func__, [[device name] UTF8String]);
+     }
+-    [devices release]; // since it was created by a *Copy* C method
+ #endif
+ 
+     // Pick and show default Metal device
+     id<MTLDevice> device = MTLCreateSystemDefaultDevice();
+     GGML_METAL_LOG_INFO("%s: picking default device: %s\n", __func__, [[device name] UTF8String]);
+ 
++    devices = MTLCopyAllDevices();
++    id <MTLDevice> dev;
++    NSString * s;
++
++    for (dev in devices) {
++        s = [dev name];
++        if ([dev isRemovable]) {
++            GGML_METAL_LOG_INFO("%s: found external device: %s\n", __func__, [s UTF8String]);
++        } else if ([dev isLowPower]) {
++            GGML_METAL_LOG_INFO("%s: found integrated device: %s\n", __func__, [s UTF8String]);
++        } else {
++            GGML_METAL_LOG_INFO("%s: found discrete device: %s\n", __func__, [s UTF8String]);
++            device = dev;
++        }
++    }
++
+     // Configure context
+     struct ggml_metal_context * ctx = malloc(sizeof(struct ggml_metal_context));
+     ctx->device = device;

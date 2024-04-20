@@ -1,0 +1,14 @@
+[project]
+name = "llama"
+version = "0.1.0"
+description = "Add a short description here"
+authors = ["Wolf Vollprecht <w.vollprecht@gmail.com>"]
+channels = ["../output", "conda-forge"]
+platforms = ["osx-arm64"]
+
+[tasks]
+start = "main -m $CONDA_PREFIX/share/llama-cpp/models/llava-v1.5-7b-Q4_K.gguf -i"
+
+[dependencies]
+"llama-cpp" = "*"
+"llava-7b-q4" = "*"

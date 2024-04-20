@@ -1,0 +1,48 @@
+recipe:
+  name: llama-cpp
+  version: b2636
+
+source:
+  url: https://github.com/ggerganov/llama.cpp/archive/refs/tags/b2636.tar.gz
+  sha256: 80afcede909fea958dc9524fe1d7936f9d9cc3e276a48db4f3bfc1ac0a1f8115
+  # patches:
+    # - discrete-device.patch
+
+outputs:
+  - package: 
+      name: llama-cpp
+    requirements:
+      build:
+        # for unknown reasons the conda-forge compiler seems to not work with Metal
+        # - ${{ compiler('cxx') }}
+        - ninja
+        - cmake
+      host:
+        - openssl
+
+    build:
+      script: |
+        export CPPFLAGS="-D_FORTIFY_SOURCE=2 -isystem $PREFIX/include -mmacosx-version-min=14.0"
+        cmake -GNinja -S . -B build -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_C_FLAGS="-D__ARM_FEATURE_DOTPROD=1" \
+          -DCMAKE_INSTALL_PREFIX=$PREFIX -DLLAMA_BUILD_TESTS=OFF \
+          -DLLAMA_METAL_EMBED_LIBRARY=1
+
+        cmake --build build
+        cmake --install build
+
+  - package:
+      name: llava-7b-q4
+      version: "1.5"
+    requirements:
+      run:
+        - llama-cpp
+
+    source:
+      url: https://huggingface.co/jartine/llava-v1.5-7B-GGUF/resolve/main/llava-v1.5-7b-Q4_K.gguf?download=true
+      sha256: c91ebf0a628ceb25e374df23ad966cc1bf1514b33fecf4f0073f9619dec5b3f9
+    build:
+      noarch: generic
+      script:
+        - mkdir -p $PREFIX/share/llama-cpp/models
+        - cp llava-v1.5-7b-Q4_K.gguf $PREFIX/share/llama-cpp/models/llava-v1.5-7b-Q4_K.gguf
