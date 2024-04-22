@@ -7,7 +7,7 @@ from torchvision.models.resnet import resnet18, ResNet18_Weights
 from functools import partial
 
 weights = ResNet18_Weights.DEFAULT
-weights.value.url = (Path(os.environ["CONDA_PREFIX"]) / "share/models/resnet18-f37072fd.pth").as_uri()
+weights.value.url = (Path(os.environ["CONDA_PREFIX"]) / "share/models/resnet/resnet18-f37072fd.pth").as_uri()
 model = resnet18(weights=weights)
 
 # set to eval mode

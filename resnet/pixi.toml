@@ -9,9 +9,9 @@ platforms = ["osx-arm64"]
 [tasks]
 download-1 = { cmd = "wget https://raw.githubusercontent.com/NVIDIA/NeMo/263a30be71e859cee330e5925332009da3e5efbc/scripts/tts_dataset_files/heteronyms-052722 -qO heteronyms", outputs = ["heteronyms"] }
 download-2 = { cmd = "wget https://raw.githubusercontent.com/NVIDIA/NeMo/263a30be71e859cee330e5925332009da3e5efbc/scripts/tts_dataset_files/cmudict-0.7b_nv22.08 -qO cmudict-0.7b", outputs = ["cmudict-0.7b"] }
-download-image-classes = { cmd = "wget https://raw.githubusercontent.com/pytorch/hub/master/imagenet_classes.txt", outputs = ["imagenet_classes.txt"] }
+download-image-classes = { cmd = "wget https://raw.githubusercontent.com/pytorch/hub/master/imagenet_classes.txt", outputs = ["imagenet_classes.txt"], depends_on = ["download-1", "download-2"]}
 
-detect = { cmd = "python detect.py", depends_on = ["download-image-classes"] }
+detect = { cmd = "python detect.py horse.jpg", depends_on = ["download-image-classes", "build_model"] }
 
 
 [dependencies]
@@ -28,3 +28,11 @@ wget = ">=1.21.4,<1.22"
 libsndfile = ">=1.2.2,<1.3"
 python = "3.12.*"
 torchvision = ">=0.16.1,<0.17"
+resnet = "*"
+
+[feature.resnet]
+dependencies = { rattler-build = "*" }
+tasks = { build_model = "rattler-build build -r resnet" }
+
+[environments]
+resnet = ["resnet"]
