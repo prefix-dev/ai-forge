@@ -1,0 +1,12 @@
+package:
+  name: resnet
+  version: 0.1.0
+
+source:
+  url: https://download.pytorch.org/models/resnet18-f37072fd.pth
+  sha256: f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec
+
+build:
+  script:
+    - mkdir -p $PREFIX/share/models/resnet/
+    - mv resnet18-f37072fd.pth $PREFIX/share/models/resnet/
