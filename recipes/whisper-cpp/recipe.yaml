@@ -41,5 +41,5 @@ outputs:
 
     build:
       script:
-        - mkdir -p $PREFIX/share/whisper-cpp/models
+        - mkdir -p $PREFIX/share/models/whisper-cpp
         - cp ./ggml-base.en.bin $PREFIX/share/models/whisper-cpp/ggml-base.en.bin
