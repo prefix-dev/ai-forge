@@ -26,13 +26,13 @@ outputs:
         # - install_name_tool -add_rpath $PREFIX/lib $PREFIX/bin/whisper-cpp-stream
         - cp ./ggml-metal.metal $PREFIX/bin/
 
-  # - package:
-  #     name: whisper-cpp-base-en
-  #   requirements:
-  #     run:
-  #       - whisper-cpp
-  #   build:
-  #     script:
-  #       - ./models/download-ggml-model.sh base.en
-  #       - mkdir -p $PREFIX/share/whisper-cpp/models
-  #       - cp ./models/ggml-base.en.bin $PREFIX/share/whisper-cpp/models/ggml-base.en.bin
+  - package:
+      name: whisper-cpp-base-en
+    requirements:
+      run:
+        - whisper-cpp
+    build:
+      script:
+        - ./models/download-ggml-model.sh base.en
+        - mkdir -p $PREFIX/share/whisper-cpp/models
+        - cp ./models/ggml-base.en.bin $PREFIX/share/whisper-cpp/models/ggml-base.en.bin
