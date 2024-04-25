@@ -1,6 +1,6 @@
 [project]
 name = "whisper"
-channels = ["../output", "conda-forge"]
+channels = ["https://prefix.dev/ai-forge", "conda-forge"]
 platforms = ["osx-arm64"]
 
 [tasks]
