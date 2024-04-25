@@ -41,6 +41,7 @@ outputs:
     source:
       url: https://huggingface.co/jartine/llava-v1.5-7B-GGUF/resolve/main/llava-v1.5-7b-Q4_K.gguf?download=true
       sha256: c91ebf0a628ceb25e374df23ad966cc1bf1514b33fecf4f0073f9619dec5b3f9
+
     build:
       noarch: generic
       script:

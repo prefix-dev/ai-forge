@@ -7,8 +7,9 @@ source:
   sha256: 06eed84de310fdf5408527e41e863ac3b80b8603576ba0521177464b1b341a3a
 
 outputs:
-  - package: 
+  - package:
       name: whisper-cpp
+
     requirements:
       build:
         - ${{ compiler('cxx') }}
@@ -28,11 +29,17 @@ outputs:
 
   - package:
       name: whisper-cpp-base-en
+      version: 0.1.0
+    source:
+      url: https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.en.bin?download=true
+      sha256: a03779c86df3323075f5e796cb2ce5029f00ec8869eee3fdfb897afe36c6d002
+      file_name: ggml-base.en.bin
+
     requirements:
       run:
         - whisper-cpp
+
     build:
       script:
-        - ./models/download-ggml-model.sh base.en
         - mkdir -p $PREFIX/share/whisper-cpp/models
-        - cp ./models/ggml-base.en.bin $PREFIX/share/whisper-cpp/models/ggml-base.en.bin
+        - cp ./ggml-base.en.bin $PREFIX/share/models/whisper-cpp/ggml-base.en.bin
