@@ -1,4 +1,4 @@
-version: 4
+version: 5
 environments:
   default:
     channels:
@@ -7,9 +7,10 @@ environments:
     packages:
       osx-arm64:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/ca-certificates-2024.2.2-hf0a4a13_0.conda
-      - conda: file:///Users/wolfv/Programs/ai-examples/output/osx-arm64/llama-cpp-b2636-h60d57d3_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libcxx-17.0.6-h5f092b4_0.conda
+      - conda: file:///Users/wolfv/Programs/ai-examples/output/osx-arm64/llama-cpp-b2813-h60d57d3_0.conda
       - conda: file:///Users/wolfv/Programs/ai-examples/output/noarch/llava-7b-q4-1.5-h4616a5c_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/openssl-3.2.1-h0d3ecfb_1.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/openssl-3.3.0-h0d3ecfb_0.conda
 packages:
 - kind: conda
   name: ca-certificates
@@ -23,19 +24,34 @@ packages:
   size: 155725
   timestamp: 1706844034242
 - kind: conda
+  name: libcxx
+  version: 17.0.6
+  build: h5f092b4_0
+  subdir: osx-arm64
+  url: https://conda.anaconda.org/conda-forge/osx-arm64/libcxx-17.0.6-h5f092b4_0.conda
+  sha256: 119d3d9306f537d4c89dc99ed99b94c396d262f0b06f7833243646f68884f2c2
+  md5: a96fd5dda8ce56c86a971e0fa02751d0
+  depends:
+  - __osx >=11.0
+  license: Apache-2.0 WITH LLVM-exception
+  license_family: Apache
+  size: 1248885
+  timestamp: 1715020154867
+- kind: conda
   name: llama-cpp
-  version: b2636
+  version: b2813
   build: h60d57d3_0
   subdir: osx-arm64
-  url: file:///Users/wolfv/Programs/ai-examples/output/osx-arm64/llama-cpp-b2636-h60d57d3_0.conda
-  sha256: b51624b256cc7f92447cfbd71597495e019ec95b3f22c1882d5c95c1d13075af
-  md5: 1c8d20d046e4911d24ca73fa7ef97915
+  url: file:///Users/wolfv/Programs/ai-examples/output/osx-arm64/llama-cpp-b2813-h60d57d3_0.conda
+  sha256: 4aa6531911c934602d930c57cd05b926d8fa199f95c8119ea36f611fc61787b7
+  md5: 71c6e95125becb9592c7498e25d8e73b
   depends:
-  - openssl >=3.2.1,<4.0a0
+  - openssl >=3.3.0,<4.0a0
+  - libcxx >=16
   arch: arm64
   platform: osx
-  size: 7369147
-  timestamp: 1712854730596
+  size: 9346954
+  timestamp: 1715184773320
 - kind: conda
   name: llava-7b-q4
   version: '1.5'
@@ -43,26 +59,25 @@ packages:
   subdir: noarch
   noarch: generic
   url: file:///Users/wolfv/Programs/ai-examples/output/noarch/llava-7b-q4-1.5-h4616a5c_0.conda
-  sha256: cdf884d1f1b002e3bf05d4934db20023bf92cd808715e153029a1e6bd4a110b9
-  md5: d8c1dff92497f063c2cfe3dc4569f088
+  sha256: ad852b146d9a6d386b7bd92aebdb851a695ec2c415546582c144c2df5ef9eb84
+  md5: e3d525f4fab98f17493ce7da6a255b37
   depends:
   - llama-cpp
-  size: 4008909790
-  timestamp: 1712748639320
+  size: 4008910348
+  timestamp: 1715181454545
 - kind: conda
   name: openssl
-  version: 3.2.1
-  build: h0d3ecfb_1
-  build_number: 1
+  version: 3.3.0
+  build: h0d3ecfb_0
   subdir: osx-arm64
-  url: https://conda.anaconda.org/conda-forge/osx-arm64/openssl-3.2.1-h0d3ecfb_1.conda
-  sha256: 519dc941d7ab0ebf31a2878d85c2f444450e7c5f6f41c4d07252c6bb3417b78b
-  md5: eb580fb888d93d5d550c557323ac5cee
+  url: https://conda.anaconda.org/conda-forge/osx-arm64/openssl-3.3.0-h0d3ecfb_0.conda
+  sha256: 51f9be8fe929c2bb3243cd0707b6dfcec27541f8284b4bd9b063c288fc46f482
+  md5: 25b0e522c3131886a637e347b2ca0c0f
   depends:
   - ca-certificates
   constrains:
   - pyopenssl >=22.1
   license: Apache-2.0
   license_family: Apache
-  size: 2855250
-  timestamp: 1710793435903
+  size: 2888226
+  timestamp: 1714466346030
