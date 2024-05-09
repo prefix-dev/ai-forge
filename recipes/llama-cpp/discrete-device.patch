@@ -1,34 +1,47 @@
 diff --git a/ggml-metal.m b/ggml-metal.m
-index 419d8b9e..f00a703c 100644
+index 78cac504..fa45fa5d 100644
 --- a/ggml-metal.m
 +++ b/ggml-metal.m
-@@ -269,13 +269,28 @@ static struct ggml_metal_context * ggml_metal_init(int n_cb) {
-     for (id<MTLDevice> device in devices) {
-         GGML_METAL_LOG_INFO("%s: found device: %s\n", __func__, [[device name] UTF8String]);
-     }
--    [devices release]; // since it was created by a *Copy* C method
+@@ -274,6 +274,9 @@ static void * ggml_metal_host_malloc(size_t n) {
+     return data;
+ }
+ 
++// Metal device selection (implementation comes later)
++static id<MTLDevice> ggml_backend_metal_get_device(void);
++
+ static struct ggml_metal_context * ggml_metal_init(int n_cb) {
+     GGML_METAL_LOG_INFO("%s: allocating\n", __func__);
+ 
+@@ -287,7 +290,7 @@ static struct ggml_metal_context * ggml_metal_init(int n_cb) {
  #endif
  
      // Pick and show default Metal device
-     id<MTLDevice> device = MTLCreateSystemDefaultDevice();
+-    id<MTLDevice> device = MTLCreateSystemDefaultDevice();
++    id<MTLDevice> device = ggml_backend_metal_get_device();
      GGML_METAL_LOG_INFO("%s: picking default device: %s\n", __func__, [[device name] UTF8String]);
  
-+    devices = MTLCopyAllDevices();
-+    id <MTLDevice> dev;
-+    NSString * s;
-+
-+    for (dev in devices) {
-+        s = [dev name];
-+        if ([dev isRemovable]) {
-+            GGML_METAL_LOG_INFO("%s: found external device: %s\n", __func__, [s UTF8String]);
-+        } else if ([dev isLowPower]) {
-+            GGML_METAL_LOG_INFO("%s: found integrated device: %s\n", __func__, [s UTF8String]);
-+        } else {
-+            GGML_METAL_LOG_INFO("%s: found discrete device: %s\n", __func__, [s UTF8String]);
-+            device = dev;
-+        }
-+    }
-+
      // Configure context
-     struct ggml_metal_context * ctx = malloc(sizeof(struct ggml_metal_context));
-     ctx->device = device;
+@@ -2806,7 +2809,22 @@ static int g_backend_device_ref_count = 0;
+ 
+ static id<MTLDevice> ggml_backend_metal_get_device(void) {
+     if (g_backend_device == nil) {
+-        g_backend_device = MTLCreateSystemDefaultDevice();
++        NSArray * select_devices = MTLCopyAllDevices();
++        NSString * s;
++        id<MTLDevice> dev;
++
++        for (dev in select_devices) {
++            s = [dev name];
++            if ([dev isRemovable]) {
++                GGML_METAL_LOG_INFO("%s: found external device: %s\n", __func__, [s UTF8String]);
++            } else if ([dev isLowPower]) {
++                GGML_METAL_LOG_INFO("%s: found integrated device: %s\n", __func__, [s UTF8String]);
++            } else {
++                GGML_METAL_LOG_INFO("%s: found discrete device: %s\n", __func__, [s UTF8String]);
++                g_backend_device = dev;
++            }
++        }
++        [select_devices release]; // since it was created by a *Copy* C method
+     }
+ 
+     g_backend_device_ref_count++;

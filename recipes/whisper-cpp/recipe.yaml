@@ -1,10 +1,13 @@
+context:
+  version: "1.5.5"
+
 recipe:
   name: whisper-cpp
-  version: 1.5.4
+  version: ${{ version }}
 
 source:
-  url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v1.5.4.tar.gz
-  sha256: 06eed84de310fdf5408527e41e863ac3b80b8603576ba0521177464b1b341a3a
+  url: https://github.com/ggerganov/whisper.cpp/archive/refs/tags/v${{ version }}.tar.gz
+  sha256: 27fa5c472657af2a6cee63de349a34b23d0f3781fa9b8ef301a940cf64964a79
 
 outputs:
   - package:
@@ -13,19 +16,30 @@ outputs:
     requirements:
       build:
         - ${{ compiler('cxx') }}
-        - make
+        - if: cuda
+          then:
+            - ${{ compiler('cuda') }}
+        - cmake
+        - ninja
       host:
+        - libcublas-dev
         - sdl2
     build:
-      script:
-        - make -j${CPU_COUNT}
-        - make -j${CPU_COUNT} stream
-        - mkdir -p $PREFIX/bin
-        - cp main $PREFIX/bin/whisper-cpp
-        - cp stream $PREFIX/bin/whisper-cpp-stream
-        # forcibly add rpath to the binary
-        # - install_name_tool -add_rpath $PREFIX/lib $PREFIX/bin/whisper-cpp-stream
-        - cp ./ggml-metal.metal $PREFIX/bin/
+      script: |
+        if [[ "${{ cuda }}" == "true" ]]; then
+          export CUDA_ARGS="-DWHISPER_CUDA=ON"
+        fi
+
+        cmake -GNinja -S . -B build ${CMAKE_ARGS} -DWHISPER_SDL2=ON \
+          -DWHISPER_BUILD_EXAMPLES=ON -DWHISPER_METAL_EMBED_LIBRARY=ON $CUDA_ARGS
+        cmake --build build
+        cmake --install build
+
+        install build/bin/main $PREFIX/bin/whisper-cpp
+        install build/bin/server $PREFIX/bin/whisper-cpp-server
+        install build/bin/stream $PREFIX/bin/whisper-cpp-stream
+        install build/bin/talk $PREFIX/bin/whisper-cpp-talk
+        install build/bin/talk-llama $PREFIX/bin/whisper-cpp-talk-llama
 
   - package:
       name: whisper-cpp-base-en

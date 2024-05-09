@@ -1,32 +1,44 @@
+context:
+  version: "b2813"
+
 recipe:
   name: llama-cpp
-  version: b2636
+  version: ${{ version }}
 
 source:
-  url: https://github.com/ggerganov/llama.cpp/archive/refs/tags/b2636.tar.gz
-  sha256: 80afcede909fea958dc9524fe1d7936f9d9cc3e276a48db4f3bfc1ac0a1f8115
-  # patches:
-    # - discrete-device.patch
+  url: https://github.com/ggerganov/llama.cpp/archive/refs/tags/${{ version }}.tar.gz
+  sha256: 59bb58e9b5e424b8d45a8cce1f492035edbcca49bdc9c69e7478b0e2df5c0207
+  patches:
+    - if: osx
+      then: discrete-device.patch
 
 outputs:
   - package: 
       name: llama-cpp
     requirements:
       build:
-        # for unknown reasons the conda-forge compiler seems to not work with Metal
-        # - ${{ compiler('cxx') }}
+        - ${{ compiler('cxx') }}
+        - if: cuda
+          then:
+            - ${{ compiler('cuda') }}
         - ninja
         - cmake
       host:
         - openssl
+        - if: cuda
+          then:
+            - libcublas-dev
 
     build:
       script: |
-        export CPPFLAGS="-D_FORTIFY_SOURCE=2 -isystem $PREFIX/include -mmacosx-version-min=14.0"
-        cmake -GNinja -S . -B build -DCMAKE_BUILD_TYPE=Release \
-          -DCMAKE_C_FLAGS="-D__ARM_FEATURE_DOTPROD=1" \
-          -DCMAKE_INSTALL_PREFIX=$PREFIX -DLLAMA_BUILD_TESTS=OFF \
-          -DLLAMA_METAL_EMBED_LIBRARY=1
+        if [[ "${{ cuda }}" == "true" ]]; then
+          export CUDA_ARGS="-DLLAMA_CUDA=ON"
+        fi
+
+        cmake -GNinja -S . -B build ${CMAKE_ARGS} \
+          -DLLAMA_BUILD_TESTS=OFF \
+          -DLLAMA_METAL_EMBED_LIBRARY=ON \
+          $CUDA_ARGS
 
         cmake --build build
         cmake --install build
