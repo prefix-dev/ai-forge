@@ -18,16 +18,27 @@ outputs:
     requirements:
       build:
         - ${{ compiler('cxx') }}
+        - if: cuda
+          then:
+            - ${{ compiler('cuda') }}
         - ninja
         - cmake
       host:
         - openssl
+        - if: cuda
+          then:
+            - libcublas-dev
 
     build:
       script: |
+        if [[ "${{ cuda }}" == "true" ]]; then
+          export CUDA_ARGS="-DLLAMA_CUDA=ON"
+        fi
+
         cmake -GNinja -S . -B build ${CMAKE_ARGS} \
           -DLLAMA_BUILD_TESTS=OFF \
-          -DLLAMA_METAL_EMBED_LIBRARY=ON
+          -DLLAMA_METAL_EMBED_LIBRARY=ON \
+          $CUDA_ARGS
 
         cmake --build build
         cmake --install build

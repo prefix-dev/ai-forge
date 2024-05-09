@@ -16,14 +16,22 @@ outputs:
     requirements:
       build:
         - ${{ compiler('cxx') }}
+        - if: cuda
+          then:
+            - ${{ compiler('cuda') }}
         - cmake
         - ninja
       host:
+        - libcublas-dev
         - sdl2
     build:
       script: |
+        if [[ "${{ cuda }}" == "true" ]]; then
+          export CUDA_ARGS="-DWHISPER_CUDA=ON"
+        fi
+
         cmake -GNinja -S . -B build ${CMAKE_ARGS} -DWHISPER_SDL2=ON \
-          -DWHISPER_BUILD_EXAMPLES=ON -DWHISPER_METAL_EMBED_LIBRARY=ON
+          -DWHISPER_BUILD_EXAMPLES=ON -DWHISPER_METAL_EMBED_LIBRARY=ON $CUDA_ARGS
         cmake --build build
         cmake --install build
 

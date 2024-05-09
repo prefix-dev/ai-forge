@@ -2,82 +2,202 @@ version: 5
 environments:
   default:
     channels:
-    - url: file:///Users/wolfv/Programs/ai-examples/output/
+    - url: file:///home/wolfv/Programs/ai-examples/output/
     - url: https://conda.anaconda.org/conda-forge/
     packages:
-      osx-arm64:
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/ca-certificates-2024.2.2-hf0a4a13_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/libcxx-17.0.6-h5f092b4_0.conda
-      - conda: file:///Users/wolfv/Programs/ai-examples/output/osx-arm64/llama-cpp-b2813-h60d57d3_0.conda
-      - conda: file:///Users/wolfv/Programs/ai-examples/output/noarch/llava-7b-q4-1.5-h4616a5c_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-arm64/openssl-3.3.0-h0d3ecfb_0.conda
+      linux-64:
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/_libgcc_mutex-0.1-conda_forge.tar.bz2
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/_openmp_mutex-4.5-2_gnu.tar.bz2
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/ca-certificates-2024.2.2-hbcca054_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/cuda-nvrtc-12.4.127-hd3aeb46_1.conda
+      - conda: https://conda.anaconda.org/conda-forge/noarch/cuda-version-12.4-h3060b56_3.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/libcublas-12.4.5.8-hd3aeb46_1.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/libgcc-ng-13.2.0-h77fa898_7.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/libgomp-13.2.0-h77fa898_7.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/libstdcxx-ng-13.2.0-hc0a3c3a_7.conda
+      - conda: file:///home/wolfv/Programs/ai-examples/output/linux-64/llama-cpp-b2813-hfcae30d_0.conda
+      - conda: file:///home/wolfv/Programs/ai-examples/output/noarch/llava-7b-q4-1.5-h4616a5c_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/openssl-3.3.0-hd590300_0.conda
 packages:
+- kind: conda
+  name: _libgcc_mutex
+  version: '0.1'
+  build: conda_forge
+  subdir: linux-64
+  url: https://conda.anaconda.org/conda-forge/linux-64/_libgcc_mutex-0.1-conda_forge.tar.bz2
+  sha256: fe51de6107f9edc7aa4f786a70f4a883943bc9d39b3bb7307c04c41410990726
+  md5: d7c89558ba9fa0495403155b64376d81
+  license: None
+  size: 2562
+  timestamp: 1578324546067
+- kind: conda
+  name: _openmp_mutex
+  version: '4.5'
+  build: 2_gnu
+  build_number: 16
+  subdir: linux-64
+  url: https://conda.anaconda.org/conda-forge/linux-64/_openmp_mutex-4.5-2_gnu.tar.bz2
+  sha256: fbe2c5e56a653bebb982eda4876a9178aedfc2b545f25d0ce9c4c0b508253d22
+  md5: 73aaf86a425cc6e73fcf236a5a46396d
+  depends:
+  - _libgcc_mutex 0.1 conda_forge
+  - libgomp >=7.5.0
+  constrains:
+  - openmp_impl 9999
+  license: BSD-3-Clause
+  license_family: BSD
+  size: 23621
+  timestamp: 1650670423406
 - kind: conda
   name: ca-certificates
   version: 2024.2.2
-  build: hf0a4a13_0
-  subdir: osx-arm64
-  url: https://conda.anaconda.org/conda-forge/osx-arm64/ca-certificates-2024.2.2-hf0a4a13_0.conda
-  sha256: 49bc3439816ac72d0c0e0f144b8cc870fdcc4adec2e861407ec818d8116b2204
-  md5: fb416a1795f18dcc5a038bc2dc54edf9
+  build: hbcca054_0
+  subdir: linux-64
+  url: https://conda.anaconda.org/conda-forge/linux-64/ca-certificates-2024.2.2-hbcca054_0.conda
+  sha256: 91d81bfecdbb142c15066df70cc952590ae8991670198f92c66b62019b251aeb
+  md5: 2f4327a1cbe7f022401b236e915a5fef
   license: ISC
-  size: 155725
-  timestamp: 1706844034242
+  size: 155432
+  timestamp: 1706843687645
 - kind: conda
-  name: libcxx
-  version: 17.0.6
-  build: h5f092b4_0
-  subdir: osx-arm64
-  url: https://conda.anaconda.org/conda-forge/osx-arm64/libcxx-17.0.6-h5f092b4_0.conda
-  sha256: 119d3d9306f537d4c89dc99ed99b94c396d262f0b06f7833243646f68884f2c2
-  md5: a96fd5dda8ce56c86a971e0fa02751d0
+  name: cuda-nvrtc
+  version: 12.4.127
+  build: hd3aeb46_1
+  build_number: 1
+  subdir: linux-64
+  url: https://conda.anaconda.org/conda-forge/linux-64/cuda-nvrtc-12.4.127-hd3aeb46_1.conda
+  sha256: 28d6ba387acd5c23f5b4827054a3e878c9a17e8c44171d74c9ba960a1435fdc5
+  md5: f2247a84365f4067a4c877056f41dcab
   depends:
-  - __osx >=11.0
-  license: Apache-2.0 WITH LLVM-exception
-  license_family: Apache
-  size: 1248885
-  timestamp: 1715020154867
+  - __glibc >=2.17,<3.0.a0
+  - cuda-version >=12.4,<12.5.0a0
+  - libgcc-ng >=12
+  - libstdcxx-ng >=12
+  license: LicenseRef-NVIDIA-End-User-License-Agreement
+  size: 18854694
+  timestamp: 1713291454593
+- kind: conda
+  name: cuda-version
+  version: '12.4'
+  build: h3060b56_3
+  build_number: 3
+  subdir: noarch
+  noarch: generic
+  url: https://conda.anaconda.org/conda-forge/noarch/cuda-version-12.4-h3060b56_3.conda
+  sha256: 571d32fbd0dc8df6e85c14d1757549927e272af9c70b935d7e3a553ab0b0b4da
+  md5: c9a3fe8b957176e1a8452c6f3431b0d8
+  constrains:
+  - cudatoolkit 12.4|12.4.*
+  - __cuda >=12
+  license: LicenseRef-NVIDIA-End-User-License-Agreement
+  size: 21022
+  timestamp: 1709765922936
+- kind: conda
+  name: libcublas
+  version: 12.4.5.8
+  build: hd3aeb46_1
+  build_number: 1
+  subdir: linux-64
+  url: https://conda.anaconda.org/conda-forge/linux-64/libcublas-12.4.5.8-hd3aeb46_1.conda
+  sha256: d47624c618c2acdd610b4994c89e4e2d645bb676c39fc72e4d5cf24f93998883
+  md5: 1a71e7fbba28c1c2c5f6f2076a410606
+  depends:
+  - __glibc >=2.17,<3.0.a0
+  - cuda-nvrtc
+  - cuda-version >=12.4,<12.5.0a0
+  - libgcc-ng >=12
+  - libstdcxx-ng >=12
+  license: LicenseRef-NVIDIA-End-User-License-Agreement
+  size: 240739947
+  timestamp: 1713293891916
+- kind: conda
+  name: libgcc-ng
+  version: 13.2.0
+  build: h77fa898_7
+  build_number: 7
+  subdir: linux-64
+  url: https://conda.anaconda.org/conda-forge/linux-64/libgcc-ng-13.2.0-h77fa898_7.conda
+  sha256: 62af2b89acbe74a21606c8410c276e57309c0a2ab8a9e8639e3c8131c0b60c92
+  md5: 72ec1b1b04c4d15d4204ece1ecea5978
+  depends:
+  - _libgcc_mutex 0.1 conda_forge
+  - _openmp_mutex >=4.5
+  constrains:
+  - libgomp 13.2.0 h77fa898_7
+  license: GPL-3.0-only WITH GCC-exception-3.1
+  size: 775806
+  timestamp: 1715016057793
+- kind: conda
+  name: libgomp
+  version: 13.2.0
+  build: h77fa898_7
+  build_number: 7
+  subdir: linux-64
+  url: https://conda.anaconda.org/conda-forge/linux-64/libgomp-13.2.0-h77fa898_7.conda
+  sha256: 781444fa069d3b50e8ed667b750571cacda785761c7fc2a89ece1ac49693d4ad
+  md5: abf3fec87c2563697defa759dec3d639
+  depends:
+  - _libgcc_mutex 0.1 conda_forge
+  license: GPL-3.0-only WITH GCC-exception-3.1
+  size: 422336
+  timestamp: 1715015995979
+- kind: conda
+  name: libstdcxx-ng
+  version: 13.2.0
+  build: hc0a3c3a_7
+  build_number: 7
+  subdir: linux-64
+  url: https://conda.anaconda.org/conda-forge/linux-64/libstdcxx-ng-13.2.0-hc0a3c3a_7.conda
+  sha256: 35f1e08be0a84810c9075f5bd008495ac94e6c5fe306dfe4b34546f11fed850f
+  md5: 53ebd4c833fa01cb2c6353e99f905406
+  license: GPL-3.0-only WITH GCC-exception-3.1
+  size: 3837704
+  timestamp: 1715016117360
 - kind: conda
   name: llama-cpp
   version: b2813
-  build: h60d57d3_0
-  subdir: osx-arm64
-  url: file:///Users/wolfv/Programs/ai-examples/output/osx-arm64/llama-cpp-b2813-h60d57d3_0.conda
-  sha256: 4aa6531911c934602d930c57cd05b926d8fa199f95c8119ea36f611fc61787b7
-  md5: 71c6e95125becb9592c7498e25d8e73b
+  build: hfcae30d_0
+  subdir: linux-64
+  url: file:///home/wolfv/Programs/ai-examples/output/linux-64/llama-cpp-b2813-hfcae30d_0.conda
+  sha256: 72d0b434d0ccc197f3b015c7ce2287e85742f5e8172987287534a4ed3eeb3d3f
+  md5: a6109b9ebd2f6ab60c94d5ad7497b5ae
   depends:
+  - libcublas >=12.4.5.8,<13.0a0
   - openssl >=3.3.0,<4.0a0
-  - libcxx >=16
-  arch: arm64
-  platform: osx
-  size: 9346954
-  timestamp: 1715184773320
+  - cuda-version >=12.0,<13
+  - libstdcxx-ng >=12
+  - libgcc-ng >=12
+  arch: x86_64
+  platform: linux
+  size: 208506753
+  timestamp: 1715234632055
 - kind: conda
   name: llava-7b-q4
   version: '1.5'
   build: h4616a5c_0
   subdir: noarch
   noarch: generic
-  url: file:///Users/wolfv/Programs/ai-examples/output/noarch/llava-7b-q4-1.5-h4616a5c_0.conda
-  sha256: ad852b146d9a6d386b7bd92aebdb851a695ec2c415546582c144c2df5ef9eb84
-  md5: e3d525f4fab98f17493ce7da6a255b37
+  url: file:///home/wolfv/Programs/ai-examples/output/noarch/llava-7b-q4-1.5-h4616a5c_0.conda
+  sha256: 70d653e8298531338646afa56e093d59e896dfd25de6f13d0a7040b1c5067894
+  md5: 7e3143e77b6a0b82f07fa4ac608322b0
   depends:
   - llama-cpp
-  size: 4008910348
-  timestamp: 1715181454545
+  size: 4008910609
+  timestamp: 1715234632055
 - kind: conda
   name: openssl
   version: 3.3.0
-  build: h0d3ecfb_0
-  subdir: osx-arm64
-  url: https://conda.anaconda.org/conda-forge/osx-arm64/openssl-3.3.0-h0d3ecfb_0.conda
-  sha256: 51f9be8fe929c2bb3243cd0707b6dfcec27541f8284b4bd9b063c288fc46f482
-  md5: 25b0e522c3131886a637e347b2ca0c0f
+  build: hd590300_0
+  subdir: linux-64
+  url: https://conda.anaconda.org/conda-forge/linux-64/openssl-3.3.0-hd590300_0.conda
+  sha256: fdbf05e4db88c592366c90bb82e446edbe33c6e49e5130d51c580b2629c0b5d5
+  md5: c0f3abb4a16477208bbd43a39bd56f18
   depends:
   - ca-certificates
+  - libgcc-ng >=12
   constrains:
   - pyopenssl >=22.1
   license: Apache-2.0
   license_family: Apache
-  size: 2888226
-  timestamp: 1714466346030
+  size: 2895187
+  timestamp: 1714466138265
