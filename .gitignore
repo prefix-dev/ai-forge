@@ -1,1 +1,3 @@
 .pixi
+__pycache__/
+deepseek/models/

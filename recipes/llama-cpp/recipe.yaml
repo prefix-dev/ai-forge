@@ -1,47 +1,51 @@
+context:
+  version: b10217
+
 recipe:
   name: llama-cpp
-  version: b2636
+  version: ${{ version }}
 
 source:
-  url: https://github.com/ggerganov/llama.cpp/archive/refs/tags/b2636.tar.gz
-  sha256: 80afcede909fea958dc9524fe1d7936f9d9cc3e276a48db4f3bfc1ac0a1f8115
-  # patches:
-    # - discrete-device.patch
+  url: https://github.com/ggml-org/llama.cpp/archive/refs/tags/${{ version }}.tar.gz
+  sha256: 35ef06b4a0ad61c0865152fe0faa7e1f33c52627e71815621ae522c7e1eda0c2
 
 outputs:
-  - package: 
+  - package:
       name: llama-cpp
     requirements:
       build:
-        # for unknown reasons the conda-forge compiler seems to not work with Metal
-        # - ${{ compiler('cxx') }}
-        - ninja
+        - ${{ compiler('c') }}
+        - ${{ compiler('cxx') }}
         - cmake
+        - ninja
       host:
         - openssl
-
     build:
       script: |
-        export CPPFLAGS="-D_FORTIFY_SOURCE=2 -isystem $PREFIX/include -mmacosx-version-min=14.0"
-        cmake -GNinja -S . -B build -DCMAKE_BUILD_TYPE=Release \
-          -DCMAKE_C_FLAGS="-D__ARM_FEATURE_DOTPROD=1" \
-          -DCMAKE_INSTALL_PREFIX=$PREFIX -DLLAMA_BUILD_TESTS=OFF \
-          -DLLAMA_METAL_EMBED_LIBRARY=1
-
-        cmake --build build
+        cmake ${CMAKE_ARGS} -GNinja -S . -B build \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_INSTALL_PREFIX=${PREFIX} \
+          -DLLAMA_BUILD_TESTS=OFF \
+          -DLLAMA_BUILD_EXAMPLES=OFF \
+          -DLLAMA_BUILD_SERVER=ON \
+          -DLLAMA_OPENSSL=ON \
+          -DGGML_METAL_EMBED_LIBRARY=ON
+        cmake --build build --parallel ${CPU_COUNT}
         cmake --install build
+    tests:
+      - script:
+          - llama-cli --version
 
   - package:
       name: llava-7b-q4
       version: "1.5"
-    requirements:
-      run:
-        - llama-cpp
-
     source:
       url: https://huggingface.co/jartine/llava-v1.5-7B-GGUF/resolve/main/llava-v1.5-7b-Q4_K.gguf?download=true
       sha256: c91ebf0a628ceb25e374df23ad966cc1bf1514b33fecf4f0073f9619dec5b3f9
-
+      file_name: llava-v1.5-7b-Q4_K.gguf
+    requirements:
+      run:
+        - llama-cpp
     build:
       noarch: generic
       script:

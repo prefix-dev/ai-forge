@@ -1,9 +1,9 @@
-[project]
+[workspace]
 name = "resnet"
 version = "0.1.0"
 description = "Add a short description here"
 authors = ["Wolf Vollprecht <w.vollprecht@gmail.com>"]
-channels = ["../output", "conda-forge"]
+channels = ["conda-forge"]
 platforms = ["osx-arm64"]
 
 [tasks]
@@ -11,7 +11,7 @@ download-1 = { cmd = "wget https://raw.githubusercontent.com/NVIDIA/NeMo/263a30b
 download-2 = { cmd = "wget https://raw.githubusercontent.com/NVIDIA/NeMo/263a30be71e859cee330e5925332009da3e5efbc/scripts/tts_dataset_files/cmudict-0.7b_nv22.08 -qO cmudict-0.7b", outputs = ["cmudict-0.7b"] }
 download-image-classes = { cmd = "wget https://raw.githubusercontent.com/pytorch/hub/master/imagenet_classes.txt", outputs = ["imagenet_classes.txt"] }
 
-detect = { cmd = "python detect.py", depends_on = ["download-image-classes"] }
+detect = { cmd = "python detect.py", depends-on = ["download-image-classes"] }
 
 
 [dependencies]

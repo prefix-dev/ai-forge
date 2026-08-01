@@ -27,9 +27,9 @@ jobs:
       with:
         fetch-depth: 2
 
-    - uses: prefix-dev/setup-pixi@v0.5.1
+    - uses: prefix-dev/setup-pixi@v0.10.0
       with:
-        pixi-version: v0.18.0
+        pixi-version: v0.75.0
         cache: true
         manifest-path: recipes/pixi.toml
 
@@ -44,8 +44,9 @@ jobs:
         TARGET_PLATFORM: ${{ matrix.target }}
 
       run: |
-        rattler-build build --recipe-dir ./recipes/whisper-cpp/ \
-          --skip-existing=all --target-platform=$TARGET_PLATFORM \
+        rattler-build build --recipe-dir ./recipes/ \
+          --continue-on-failure --skip-existing=all \
+          --target-platform=$TARGET_PLATFORM \
           -c conda-forge -c https://prefix.dev/ai-forge \
           -m ./recipes/variant_config.yaml
 
